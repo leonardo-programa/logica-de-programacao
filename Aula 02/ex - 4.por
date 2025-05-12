@@ -1,6 +1,6 @@
 programa {
   funcao inicio() {
-    real a1, a2, a3
+    real angulo1, angulo2, angulo3
     
     escreva ("Digite o primeiro angulo: ")
     leia (a1)
