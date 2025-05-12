@@ -26,6 +26,10 @@ programa {
         escreva ("O resultado é: ", n1 * n2)
         pare
       caso 4:
+        se (n2 == 0){
+          escreva ("Não é possivel dividir por zero")
+          pare
+        }
         escreva ("O resultado é: ", n1 / n2)
         pare
       caso contrario:
