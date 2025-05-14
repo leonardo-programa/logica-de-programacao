@@ -1,6 +1,7 @@
 programa {
+  inclua biblioteca Util --> u
   funcao inicio() {
-
+    
     inteiro opcao
 
     faca{
@@ -43,7 +44,8 @@ programa {
           pare
         }
       }
-
+      u.aguarde (2000)
+      limpa()
 
     } enquanto (opcao != 0)
   }
