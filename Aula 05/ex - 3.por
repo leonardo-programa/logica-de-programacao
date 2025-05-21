@@ -1,16 +1,16 @@
 programa {
-  real media, falta
   funcao inicio() {
-
+    real media
+    inteiro falta
     escreva("Digite sua média: ")
     leia (media)
     escreva("Digite a quantidade de faltas: ")
     leia (falta)
-    situacao ()
+    situacao (media, falta)
     
   }
 
-  funcao situacao () {
+  funcao situacao (real media, inteiro falta) {
     se (media < 0 ou media > 10 ou falta < 0){
       escreva ("Valores inadequados.")
     }
