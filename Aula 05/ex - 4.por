@@ -2,17 +2,19 @@ programa {
 
   funcao inicio() {
     inteiro ano
+
     escreva ("Digite o ano: ")
     leia (ano)
 
-    ehBissexto(ano)
-  }
-  funcao ehBissexto (inteiro ano){
-    se (ano % 400 == 0 ou (ano % 4 == 0 e ano % 100 != 0)){
-      escreva ("É bissexto.")
+    se (ehBissexto(ano)){
+      escreva (ano, " é bissexto.\n")
     }
     senao {
-      escreva ("Não é bissexto.")
+      escreva (ano, " não é bissexto.")
     }
+  }
+  funcao logico ehBissexto (inteiro ano){
+      retorne (ano % 400 == 0) ou (ano % 4 == 0 e ano % 100 != 0)
+
   }
 }
