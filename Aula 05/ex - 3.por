@@ -2,6 +2,7 @@ programa {
   funcao inicio() {
     real media
     inteiro falta
+
     escreva("Digite sua média: ")
     leia (media)
     escreva("Digite a quantidade de faltas: ")
