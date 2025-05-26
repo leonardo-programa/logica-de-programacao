@@ -12,7 +12,7 @@ programa {
     
     se (contador <= n){
       escreva (contador, " ")
-      contador ++
+      contador++
       recursiva (contador, n)
     }
     senao {
