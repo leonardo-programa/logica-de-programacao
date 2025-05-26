@@ -15,22 +15,22 @@ programa {
     }
     senao se (numeros > 0 e numeros % 2 == 0){
       positivos++
-      pares ++
+      pares++
       verificacao (numeros, positivos, negativos, pares, impares)
     }
     senao se (numeros < 0 e numeros % 2 == 0){
       negativos++
-      pares ++
+      pares++
       verificacao (numeros, positivos, negativos, pares, impares)
     }
     senao se (numeros > 0 e numeros % 2 != 0){
-      positivos ++
-      impares ++
+      positivos++
+      impares++
       verificacao (numeros, positivos, negativos, pares, impares)
     }
     senao {
-      negativos ++
-      impares ++
+      negativos++
+      impares++
       verificacao (numeros, positivos, negativos, pares, impares)
     }
   }
