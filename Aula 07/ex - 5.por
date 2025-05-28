@@ -22,8 +22,8 @@ programa {
       se (contagemAtual > maiorContagem){
         maiorContagem = contagemAtual
         maisFrequente = numeros[i]
-        retorne numeros[maisFrequente]
       }
+      retorne numeros[maisFrequente]
     }
   }
 }
