@@ -1,0 +1,327 @@
+#include <stdio.h>
+#include <string.h>
+#define Max_Aluno 100
+
+typedef struct {
+    int matricula;
+    char nome[100];
+    float nota1, nota2;
+    float media;
+} Aluno;
+
+// Funções utilitarias
+int Menu();
+int VerificaAluno(Aluno alunos[], int totalAluno, int numero);
+// Funções funcionais
+void Matricula(Aluno alunos[], int *totalAluno, int *id);
+void ExibirAlunos(Aluno alunos[], int totalAlunos);
+void BuscarAluno(Aluno alunos[], int totalAlunos);
+void AtualizarAluno(Aluno alunos[], int totalAlunos);
+void ExcluirAluno(Aluno alunos[], int *totalAlunos);
+void CalcularMedia(Aluno alunos[], int totalAlunos);
+void ExibirAprRpr(Aluno alunos [], int totalAlunos);
+void MediaEscola(Aluno alunos[], int totalAlunos);
+
+// Funções do banco de dados
+void SalvarDados (Aluno alunos[], int totalAlunos);
+void CarregarDados (Aluno alunos[], int *i, int *id);
+
+int main(){
+    Aluno alunos[Max_Aluno];
+    int opcao, totalAlunos = 0, id;
+
+    CarregarDados (alunos, &totalAlunos, &id);
+    do {
+        opcao = Menu();
+
+        switch (opcao){
+            case 0:
+                SalvarDados(alunos, totalAlunos);
+                printf ("\nSaindo...");
+                break;
+            case 1:
+                Matricula (alunos, &totalAlunos, &id);
+                break;
+            case 2:
+                ExibirAlunos (alunos, totalAlunos);
+                break;
+            case 3:
+                BuscarAluno (alunos, totalAlunos);
+                break;
+            case 4: 
+                AtualizarAluno(alunos, totalAlunos);
+                break;
+            case 5:
+                ExcluirAluno(alunos, &totalAlunos);
+                break;
+            case 6:
+                CalcularMedia(alunos, totalAlunos);
+                break;
+            case 7:
+                ExibirAprRpr(alunos, totalAlunos);
+                break;
+            case 8:
+                MediaEscola(alunos, totalAlunos);
+                break;
+            case 9:
+                
+                break;
+        }
+    } while (opcao != 0);
+    return 0;
+}
+
+//Funções utilitarias
+int Menu(){
+    int opcao;
+
+    printf ("\n============ GERENCIAMENTO DE ALUNOS ============\n");
+    printf ("1 - Matricula          6 - Calcular Media\n");
+    printf ("2 - Exibir Alunos      7 - Aprovados / Reprovados\n");
+    printf ("3 - Buscar Aluno       8 - Media da escola\n");
+    printf ("4 - Atualizar Aluno    9 - \n");
+    printf ("5 - Excluir Aluno      0 - Sair\n");
+    printf ("\n============ GERENCIAMENTO DE ALUNOS ============\n\n");
+
+    printf ("Digite a opcao desejada: ");
+    scanf ("%d", &opcao);
+
+    return opcao;
+}
+int VerificaAluno(Aluno alunos[], int totalAlunos, int numero){
+    if (totalAlunos == 0){
+        printf ("\nNao existem alunos cadastrados!\n");
+        return -1;
+    }
+
+    for (int i = 0; i < totalAlunos; i++){
+        if (numero == alunos[i].matricula){
+            return i;
+        }
+    }
+    printf ("\nConta nao encontrada!\n");
+    return -2;
+}
+// Funções funcionais
+void Matricula (Aluno alunos[], int *totalAlunos, int *id){
+    if (*totalAlunos >= Max_Aluno){
+        printf ("\nTotal de alunos atingido!\n");
+        return;
+    }
+
+    int i = *totalAlunos;
+    printf ("\nDigite o nome do aluno: ");
+    getchar();
+    scanf ("%99[^\n]", alunos[i].nome);
+    alunos[i].matricula = *id;
+    printf ("\nDigite a primeira nota do aluno: ");
+    scanf ("%f", &alunos[i].nota1);
+    printf ("\nDigite a segunda nota do aluno: ");
+    scanf ("%f", &alunos[i].nota2);
+
+
+    printf ("\n====== DADOS ======\n");
+    printf ("Nome: %s\n", alunos[i].nome);
+    printf ("Matricula: %d\n", alunos[i].matricula);
+    printf ("Nota 1 - %.2f\nNota 2 - %.2f", alunos[i].nota1, alunos[i].nota2);
+    printf ("\n====== DADOS ======\n");
+
+    (*totalAlunos)++;
+    (*id)++;
+}
+void ExibirAlunos(Aluno alunos[], int totalAlunos){
+    if (totalAlunos == 0){
+        printf ("\nNenhum aluno cadastrado!\n");
+        return;
+    }
+    for(int i = 0; i < totalAlunos; i++){
+        printf ("\n====== DADOS ======\n");
+        printf ("Nome: %s\n", alunos[i].nome);
+        printf ("Matricula: %d\n", alunos[i].matricula);
+        printf ("Nota 1 - %.2f\nNota 2 - %.2f\n", alunos[i].nota1, alunos[i].nota2);
+        printf ("====== DADOS ======\n");
+    }
+}
+void BuscarAluno(Aluno alunos[], int totalAlunos){
+    int numero;
+    
+    printf("\nDigite o numero de matricula do aluno: ");
+    scanf ("%d", &numero);
+
+    int i = VerificaAluno (alunos, totalAlunos, numero);
+
+    if (i > 0){
+        printf ("\n====== DADOS ======\n");
+        printf ("Nome: %s\n", alunos[i].nome);
+        printf ("Matricula: %d\n", alunos[i].matricula);
+        printf ("Nota 1 - %.2f\nNota 2 - %.2f\n", alunos[i].nota1, alunos[i].nota2);
+        printf ("\n====== DADOS ======\n\n");
+    }
+}
+void AtualizarAluno(Aluno alunos[], int totalAlunos){
+    int numero;
+    printf ("\nDigite o numero de matricula do aluno: ");
+    scanf ("%d", &numero);
+
+    int i = VerificaAluno (alunos, totalAlunos, numero);
+
+    if (i > 0){
+        printf ("\n========= DADOS =========\n");
+        printf ("Nome: %s\n", alunos[i].nome);
+        printf ("Matricula: %d\n", alunos[i].matricula);
+        printf ("Nota 1 - %.2f\nNota 2 - %.2f\n", alunos[i].nota1, alunos[i].nota2);
+        printf ("\n========= DADOS =========\n");
+
+        getchar();
+        printf ("\nNovo nome: ");
+        fgets(alunos[i].nome, Max_Aluno, stdin);
+        printf ("Novas notas:\nNota 1 - ");
+        scanf ("%f", &alunos[i].nota1);
+        printf ("\nNota 2 - ");
+        scanf ("%f", &alunos[i].nota2);
+
+        printf ("\n=== DADOS ATUALIZADOS ===\n");
+        printf ("Nome: %s\n", alunos[i].nome);
+        printf ("Matricula: %d\n", alunos[i].matricula);
+        printf ("Notas:\nNota 1 - %.2f\nNota 2 - %.2f\n", alunos[i].nota1, alunos[i].nota2);
+        printf ("\n=== DADOS ATUALIZADOS ===\n");
+    }
+}
+void ExcluirAluno(Aluno alunos[], int *totalAlunos){
+    int numero;
+    printf ("\nDigite qual aluno deseja desmatricular: ");
+    scanf ("%d", &numero);
+
+    int iDel = VerificaAluno (alunos, *totalAlunos, numero);
+
+    if (iDel > 0){
+        for (int i = iDel; i < (*totalAlunos); i++){
+            strcpy(alunos[i].nome, alunos[i + 1].nome);
+            alunos[i].matricula = alunos[i + 1].matricula;
+            alunos[i].nota1 = alunos[i + 1].nota1;
+            alunos[i].nota2 = alunos[i + 1].nota2; 
+            alunos[i].media = alunos [i + 1].media;
+        }
+    }
+
+    strcpy (alunos[(*totalAlunos) - 1].nome, "");
+    alunos[(*totalAlunos) - 1].nota1 = 0;
+    alunos[(*totalAlunos) - 1].nota2 = 0;
+
+    (*totalAlunos)--;
+}
+void CalcularMedia(Aluno alunos[], int totalAlunos){
+    int numero;
+
+    printf ("\nDigite o numero de matricula do Aluno: ");
+    scanf ("%d", &numero);
+
+    int i = VerificaAluno (alunos, totalAlunos, numero);
+
+    if (i > 0){
+        printf ("\n====== DADOS ======\n");
+        printf ("Nome: %s\n", alunos[i].nome);
+        printf ("Matricula: %d\n", alunos[i].matricula);
+        printf ("Nota 1 - %.2f\nNota 2 - %.2f\n", alunos[i].nota1, alunos[i].nota2);
+        printf ("\n====== DADOS ======\n\n");
+
+        alunos[i].media = (alunos [i].nota1 + alunos[i].nota2) / 2;
+
+        printf ("Media do aluno: %f", alunos[i].media);
+    }
+}
+void ExibirAprRpr(Aluno alunos[], int totalAlunos){
+    int apr = 0, rpr = 0;
+
+    if (totalAlunos == 0){
+        printf ("\nNenhum aluno cadastrado!\n");
+        return;
+    }
+    else {
+        printf ("\n==== APROVADO ====\n");
+
+        for (int i = 0; i < totalAlunos; i++){
+            if (alunos[i].media >= 6){
+                printf ("Aluno: %s\n", alunos[i].nome);
+                apr++;
+            }
+        }
+        printf ("==== APROVADO ====\n");
+        printf ("\n=== REPROVADO ===\n");
+
+        for (int i = 0; i < totalAlunos; i++){
+            if (alunos[i].media <= 6){
+                printf ("Aluno: %s\n", alunos[i].nome);
+                rpr++;
+            }
+        }
+        printf ("=== REPROVADO ===\n");
+        printf ("\nQuantidade de alunos aprovados: %d", apr);
+        printf ("\nQuantidade de alunos reprovados: %d\n", rpr);
+    }
+}
+void MediaEscola(Aluno alunos[], int totalAlunos){
+    int apr = 0;
+
+    if (totalAlunos == 0){
+        printf ("\nNenhum aluno cadastrado!\n");
+        return;
+    }
+    else {
+        printf ("\n=== DADOS DA ESCOLA ===\n");
+        printf ("Quantidade de alunos: %d\n", totalAlunos);
+
+        for (int i = 0; i < totalAlunos; i++){
+            if (alunos[i].media >= 6){
+                apr++;
+            }
+        }
+        
+        if (totalAlunos > 0) {
+            printf ("Taxa de aprovacao da escola: %.2f%%", (apr / totalAlunos) * 100);
+        } else {
+            printf ("Taxa de aprovacao da escola: N/A (sem alunos)");
+        }
+        printf ("\n=== DADOS DA ESCOLA ===\n");
+    }
+}
+void DadosEscola (Aluno alunos[], int totalAlunos){
+
+}
+// Funções do banco de dados
+void SalvarDados (Aluno alunos[], int totalAlunos){
+    FILE *file = fopen ("boletim.txt", "w");
+
+    if (file == NULL){
+        printf ("Erro ao abrir o arquivo!");
+        return;
+    }
+
+    for (int i = 0; i < totalAlunos; i++){
+        fprintf (file, "Matricula: %d, Nome: %s, Nota 1: %.2f, Nota 2: %.2f, Media: %.2f\n", alunos[i].matricula, alunos[i].nome, alunos[i].nota1, alunos[i].nota2, alunos[i].media);
+    }
+
+    fclose(file);
+
+}
+void CarregarDados (Aluno alunos[], int *i, int *id){
+    FILE *file = fopen ("boletim.txt", "r");
+
+    if (file == NULL){
+        printf ("Erro ao abrir o arquivo!");
+        return;
+    }
+
+    while (fscanf(file, "%d, %99[^,], %f, %f, %f", alunos[*i].matricula, alunos[*i].nome, alunos[*i].nota1, alunos[*i].nota2, alunos[*i].media) == 5){
+        (*i)++;
+    }
+    
+    if (*i == 0){
+        (*id) = 1001;
+    }
+    else if (*i > 0){
+        (*id) = alunos[*i + 1].matricula - 1;
+    }
+
+    fclose(file);
+}
