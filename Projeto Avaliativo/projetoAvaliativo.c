@@ -1,4 +1,4 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <string.h>
 #define Max_Aluno 100
 
@@ -20,7 +20,7 @@ void AtualizarAluno(Aluno alunos[], int totalAlunos);
 void ExcluirAluno(Aluno alunos[], int *totalAlunos);
 void CalcularMedia(Aluno alunos[], int totalAlunos);
 void ExibirAprRpr(Aluno alunos [], int totalAlunos);
-void MediaEscola(Aluno alunos[], int totalAlunos);
+void DadosEscola(Aluno alunos[], int totalAlunos);
 
 // Funções do banco de dados
 void SalvarDados (Aluno alunos[], int totalAlunos);
@@ -61,7 +61,7 @@ int main(){
                 ExibirAprRpr(alunos, totalAlunos);
                 break;
             case 8:
-                MediaEscola(alunos, totalAlunos);
+                DadosEscola(alunos, totalAlunos);
                 break;
             case 9:
                 
@@ -108,24 +108,41 @@ void Matricula (Aluno alunos[], int *totalAlunos, int *id){
         printf ("\nTotal de alunos atingido!\n");
         return;
     }
+    if (*totalAlunos == 0){
+        *id = 1001;
+    }
 
     int i = *totalAlunos;
     printf ("\nDigite o nome do aluno: ");
     getchar();
-    scanf ("%99[^\n]", alunos[i].nome);
+    fgets(alunos[i].nome, Max_Aluno, stdin);
+    alunos[i].nome[strcspn(alunos[i].nome, "\n")] = '\0';
     alunos[i].matricula = *id;
     printf ("\nDigite a primeira nota do aluno: ");
     scanf ("%f", &alunos[i].nota1);
     printf ("\nDigite a segunda nota do aluno: ");
     scanf ("%f", &alunos[i].nota2);
 
+    char calMedia;
+    printf ("\nDeseja calcular a media do aluno (s/n)? ");
+    scanf (" %c", &calMedia);
 
-    printf ("\n====== DADOS ======\n");
-    printf ("Nome: %s\n", alunos[i].nome);
-    printf ("Matricula: %d\n", alunos[i].matricula);
-    printf ("Nota 1 - %.2f\nNota 2 - %.2f", alunos[i].nota1, alunos[i].nota2);
-    printf ("\n====== DADOS ======\n");
-
+    if (calMedia == 's' || calMedia == 'S'){
+        alunos[i].media = (alunos[i].nota1 + alunos[i].nota2) / 2;
+        printf ("\n====== DADOS ======\n");
+        printf ("Nome: %s\n", alunos[i].nome);
+        printf ("Matricula: %d\n", alunos[i].matricula);
+        printf ("Nota 1 - %.2f\nNota 2 - %.2f\n", alunos[i].nota1, alunos[i].nota2);
+        printf ("Media: %.2f", alunos[i].media);
+        printf ("\n====== DADOS ======\n");
+    }
+    else{
+        printf ("\n====== DADOS ======\n");
+        printf ("Nome: %s\n", alunos[i].nome);
+        printf ("Matricula: %d\n", alunos[i].matricula);
+        printf ("Nota 1 - %.2f\nNota 2 - %.2f", alunos[i].nota1, alunos[i].nota2);
+        printf ("\n====== DADOS ======\n");
+    }
     (*totalAlunos)++;
     (*id)++;
 }
@@ -150,11 +167,11 @@ void BuscarAluno(Aluno alunos[], int totalAlunos){
 
     int i = VerificaAluno (alunos, totalAlunos, numero);
 
-    if (i > 0){
+    if (i >= 0){
         printf ("\n====== DADOS ======\n");
         printf ("Nome: %s\n", alunos[i].nome);
         printf ("Matricula: %d\n", alunos[i].matricula);
-        printf ("Nota 1 - %.2f\nNota 2 - %.2f\n", alunos[i].nota1, alunos[i].nota2);
+        printf ("Nota 1 - %.2f\nNota 2 - %.2f", alunos[i].nota1, alunos[i].nota2);
         printf ("\n====== DADOS ======\n\n");
     }
 }
@@ -165,16 +182,17 @@ void AtualizarAluno(Aluno alunos[], int totalAlunos){
 
     int i = VerificaAluno (alunos, totalAlunos, numero);
 
-    if (i > 0){
+    if (i >= 0){
         printf ("\n========= DADOS =========\n");
         printf ("Nome: %s\n", alunos[i].nome);
         printf ("Matricula: %d\n", alunos[i].matricula);
-        printf ("Nota 1 - %.2f\nNota 2 - %.2f\n", alunos[i].nota1, alunos[i].nota2);
+        printf ("Nota 1 - %.2f\nNota 2 - %.2f", alunos[i].nota1, alunos[i].nota2);
         printf ("\n========= DADOS =========\n");
 
         getchar();
         printf ("\nNovo nome: ");
         fgets(alunos[i].nome, Max_Aluno, stdin);
+        alunos[i].nome[strcspn(alunos[i].nome, "\n")] = '\0';
         printf ("Novas notas:\nNota 1 - ");
         scanf ("%f", &alunos[i].nota1);
         printf ("\nNota 2 - ");
@@ -194,21 +212,21 @@ void ExcluirAluno(Aluno alunos[], int *totalAlunos){
 
     int iDel = VerificaAluno (alunos, *totalAlunos, numero);
 
-    if (iDel > 0){
-        for (int i = iDel; i < (*totalAlunos); i++){
+    if (iDel >= 0){
+        for (int i = iDel; i < (*totalAlunos) - 1; i++){
             strcpy(alunos[i].nome, alunos[i + 1].nome);
             alunos[i].matricula = alunos[i + 1].matricula;
             alunos[i].nota1 = alunos[i + 1].nota1;
             alunos[i].nota2 = alunos[i + 1].nota2; 
             alunos[i].media = alunos [i + 1].media;
         }
+        
+        strcpy (alunos[(*totalAlunos) - 1].nome, "");
+        alunos[(*totalAlunos) - 1].nota1 = 0;
+        alunos[(*totalAlunos) - 1].nota2 = 0;
+        (*totalAlunos)--;
+        printf ("\nAluno desmatriculado com sucesso!\n");
     }
-
-    strcpy (alunos[(*totalAlunos) - 1].nome, "");
-    alunos[(*totalAlunos) - 1].nota1 = 0;
-    alunos[(*totalAlunos) - 1].nota2 = 0;
-
-    (*totalAlunos)--;
 }
 void CalcularMedia(Aluno alunos[], int totalAlunos){
     int numero;
@@ -218,7 +236,7 @@ void CalcularMedia(Aluno alunos[], int totalAlunos){
 
     int i = VerificaAluno (alunos, totalAlunos, numero);
 
-    if (i > 0){
+    if (i >= 0){
         printf ("\n====== DADOS ======\n");
         printf ("Nome: %s\n", alunos[i].nome);
         printf ("Matricula: %d\n", alunos[i].matricula);
@@ -227,7 +245,7 @@ void CalcularMedia(Aluno alunos[], int totalAlunos){
 
         alunos[i].media = (alunos [i].nota1 + alunos[i].nota2) / 2;
 
-        printf ("Media do aluno: %f", alunos[i].media);
+        printf ("Media do aluno: %f\n", alunos[i].media);
     }
 }
 void ExibirAprRpr(Aluno alunos[], int totalAlunos){
@@ -250,7 +268,7 @@ void ExibirAprRpr(Aluno alunos[], int totalAlunos){
         printf ("\n=== REPROVADO ===\n");
 
         for (int i = 0; i < totalAlunos; i++){
-            if (alunos[i].media <= 6){
+            if (alunos[i].media < 6){
                 printf ("Aluno: %s\n", alunos[i].nome);
                 rpr++;
             }
@@ -260,33 +278,50 @@ void ExibirAprRpr(Aluno alunos[], int totalAlunos){
         printf ("\nQuantidade de alunos reprovados: %d\n", rpr);
     }
 }
-void MediaEscola(Aluno alunos[], int totalAlunos){
-    int apr = 0;
-
-    if (totalAlunos == 0){
-        printf ("\nNenhum aluno cadastrado!\n");
-        return;
-    }
-    else {
-        printf ("\n=== DADOS DA ESCOLA ===\n");
-        printf ("Quantidade de alunos: %d\n", totalAlunos);
-
-        for (int i = 0; i < totalAlunos; i++){
-            if (alunos[i].media >= 6){
-                apr++;
-            }
-        }
-        
-        if (totalAlunos > 0) {
-            printf ("Taxa de aprovacao da escola: %.2f%%", (apr / totalAlunos) * 100);
-        } else {
-            printf ("Taxa de aprovacao da escola: N/A (sem alunos)");
-        }
-        printf ("\n=== DADOS DA ESCOLA ===\n");
-    }
-}
 void DadosEscola (Aluno alunos[], int totalAlunos){
+    int apr = 0, rpr = 0, MaiorM = -1, MenorM = totalAlunos - 1;
+    float SomaMedia = 0;
 
+    printf ("\n=== DADOS DA ESCOLA ===\n");
+    printf ("Quantidade de alunos: %d\n", totalAlunos);
+
+    for (int i = 0; i < totalAlunos; i++){
+        if (alunos[i].media >= 6){
+            apr++;
+        }
+        else{
+            rpr++;
+        }
+        if (alunos[i].media >= alunos[MaiorM].media){
+            MaiorM = i;
+        }
+        if (alunos[i].media <= alunos[MenorM].media){
+            MenorM = i;
+        }
+
+        SomaMedia += alunos[i].media;
+    }
+    
+    if (totalAlunos > 0) {
+        float MediaGeral = SomaMedia / totalAlunos;
+
+        printf ("Quantidade de Aprovados: %d\n", apr);
+        printf ("Quantidade de Reprovados: %d\n", rpr);
+        printf ("Taxa de aprovacao da escola (aproximado): %.2f\n", ((float)apr / totalAlunos) * 100);
+        printf ("Media geral da escola: %.2f\n\n", MediaGeral);
+        
+        printf ("Dados do aluno destaque:\n");
+        printf ("Nome: %s\n", alunos[MaiorM].nome);
+        printf ("Media: %.2f\n\n", alunos[MaiorM].media);
+
+        printf ("Dados do pior aluno:\n");
+        printf ("Nome: %s\n", alunos[MenorM].nome);
+        printf ("Media: %.2f\n", alunos[MenorM].media);
+    } else {
+        printf ("Taxa de aprovacao da escola: N/A (sem alunos)\n");
+        printf ("Media geral da escola: N/A (sem alunos)\n");
+    }
+    printf ("\n=== DADOS DA ESCOLA ===\n");
 }
 // Funções do banco de dados
 void SalvarDados (Aluno alunos[], int totalAlunos){
@@ -298,7 +333,7 @@ void SalvarDados (Aluno alunos[], int totalAlunos){
     }
 
     for (int i = 0; i < totalAlunos; i++){
-        fprintf (file, "Matricula: %d, Nome: %s, Nota 1: %.2f, Nota 2: %.2f, Media: %.2f\n", alunos[i].matricula, alunos[i].nome, alunos[i].nota1, alunos[i].nota2, alunos[i].media);
+        fprintf (file, "%d,%s,%.2f,%.2f,%.2f\n", alunos[i].matricula, alunos[i].nome, alunos[i].nota1, alunos[i].nota2, alunos[i].media);
     }
 
     fclose(file);
@@ -312,7 +347,7 @@ void CarregarDados (Aluno alunos[], int *i, int *id){
         return;
     }
 
-    while (fscanf(file, "%d, %99[^,], %f, %f, %f", alunos[*i].matricula, alunos[*i].nome, alunos[*i].nota1, alunos[*i].nota2, alunos[*i].media) == 5){
+    while (fscanf(file, "%d,%99[^,],%f,%f,%f\n", &alunos[*i].matricula, alunos[*i].nome, &alunos[*i].nota1, &alunos[*i].nota2, &alunos[*i].media) == 5){
         (*i)++;
     }
     
@@ -320,7 +355,7 @@ void CarregarDados (Aluno alunos[], int *i, int *id){
         (*id) = 1001;
     }
     else if (*i > 0){
-        (*id) = alunos[*i + 1].matricula - 1;
+        (*id) = alunos[*i - 1].matricula + 1;
     }
 
     fclose(file);
