@@ -2,10 +2,7 @@
 #include <string.h>
 #include <windows.h>
 #include <stdlib.h>
-#define Max_Aluno 100 
-typedef struct{
-
-} Materia;
+#define Max_Aluno 100
 
 typedef struct {
     int matricula;
@@ -24,8 +21,8 @@ void ExibirAlunos(Aluno alunos[], int totalAlunos);
 void BuscarAluno(Aluno alunos[], int totalAlunos);
 void AtualizarAluno(Aluno alunos[], int totalAlunos);
 void ExcluirAluno(Aluno alunos[], int *totalAlunos);
-void CalcularMedia(Aluno alunos[], int totalAlunos);
 void ExibirAprRpr(Aluno alunos [], int totalAlunos);
+void RankingAlunos(Aluno alunos [], int totalAlunos);
 void DadosEscola(Aluno alunos[], int totalAlunos);
 
 // Funções do banco de dados
@@ -67,10 +64,11 @@ int main(){
                 ExibirAprRpr(alunos, totalAlunos);
                 break;
             case 8:
-                DadosEscola(alunos, totalAlunos);
+                RankingAlunos(alunos, totalAlunos);
                 break;
             case 9:
-
+                DadosEscola(alunos, totalAlunos);
+                break;
             default:
                 printf ("Numero inválido!\n");
                 break;
@@ -88,8 +86,8 @@ int Menu(){
     printf ("\n============ GERENCIAMENTO DE ALUNOS ============\n");
     printf ("1 - Matricula            6 - Excluir Aluno\n");
     printf ("2 - Adicionar Notas      7 - Aprovados / Reprovados\n");
-    printf ("3 - Exibir Alunos        8 - Media da escola\n");
-    printf ("4 - Buscar Aluno         9 - \n");
+    printf ("3 - Exibir Alunos        8 - Ranking de alunos\n");
+    printf ("4 - Buscar Aluno         9 - Media da escola\n");
     printf ("5 - Atualizar Aluno      0 - Sair\n");
     printf ("\n============ GERENCIAMENTO DE ALUNOS ============\n\n");
 
@@ -100,7 +98,7 @@ int Menu(){
 }
 int VerificaAluno(Aluno alunos[], int totalAlunos, int numero){
     if (totalAlunos == 0){
-        printf ("\nNao existem alunos cadastrados!\n");
+        printf ("\nNenhum aluno cadastrado!\n");
         return -1;
     }
 
@@ -340,6 +338,33 @@ void ExibirAprRpr(Aluno alunos[], int totalAlunos){
         printf ("\nQuantidade de alunos aprovados: %d", apr);
         printf ("\nQuantidade de alunos reprovados: %d\n", rpr);
     }
+}
+void RankingAlunos(Aluno alunos[], int totalAlunos){
+    if (totalAlunos == 0){
+        printf ("\nNenhum aluno cadastrado!\n");
+        return;
+    }
+    
+    Aluno ranking [Max_Aluno];
+    for (int i = 0; i < totalAlunos; i++){
+        ranking[i] = alunos[i];
+    }
+
+    for (int i = 0; i < totalAlunos; i++){
+        for (int j = 0; j < totalAlunos - i - 1; j++){
+            if(ranking[j + 1].media > ranking[j].media){
+                Aluno id = ranking[j];
+                ranking[j] = ranking [j + 1];
+                ranking [j + 1] = id;
+            }
+        }
+    
+    }
+    printf ("\n=== RANKING DE MEDIA ===\n");
+    for (int i = 0; i < totalAlunos; i++){
+        printf ("%d - %s - %.2f\n", i + 1, ranking[i].nome, ranking[i].media);
+    }
+    printf ("=== RANKING DE MEDIA ===\n");
 }
 void DadosEscola (Aluno alunos[], int totalAlunos){
     int apr = 0, rpr = 0, MaiorM = -1, MenorM = totalAlunos - 1;
