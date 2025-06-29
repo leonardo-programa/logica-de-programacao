@@ -316,7 +316,6 @@ void ExibirAprRpr(Aluno alunos[], int totalAlunos){
         printf ("\nNenhum aluno cadastrado!\n");
         return;
     }
-    else {
         printf ("\n==== APROVADO ====\n");
 
         for (int i = 0; i < totalAlunos; i++){
@@ -337,7 +336,6 @@ void ExibirAprRpr(Aluno alunos[], int totalAlunos){
         printf ("=== REPROVADO ===\n");
         printf ("\nQuantidade de alunos aprovados: %d", apr);
         printf ("\nQuantidade de alunos reprovados: %d\n", rpr);
-    }
 }
 void RankingAlunos(Aluno alunos[], int totalAlunos){
     if (totalAlunos == 0){
@@ -367,8 +365,14 @@ void RankingAlunos(Aluno alunos[], int totalAlunos){
     printf ("=== RANKING DE MEDIA ===\n");
 }
 void DadosEscola (Aluno alunos[], int totalAlunos){
-    int apr = 0, rpr = 0, MaiorM = -1, MenorM = totalAlunos - 1;
+    int apr = 0, rpr = 0;
     float SomaMedia = 0;
+
+    if (totalAlunos == 0){
+        printf ("\nNenhum aluno cadastrado!\n");
+        return;
+    }
+    int MaiorA = 0, MenorA = totalAlunos - 1;
 
     printf ("\n=== DADOS DA ESCOLA ===\n");
     printf ("Quantidade de alunos: %d\n", totalAlunos);
@@ -380,11 +384,11 @@ void DadosEscola (Aluno alunos[], int totalAlunos){
         else{
             rpr++;
         }
-        if (alunos[i].media >= alunos[MaiorM].media){
-            MaiorM = i;
+        if (alunos[i].media >= alunos[MaiorA].media){
+            MaiorA = i;
         }
-        if (alunos[i].media <= alunos[MenorM].media){
-            MenorM = i;
+        if (alunos[i].media <= alunos[MenorA].media){
+            MenorA = i;
         }
 
         SomaMedia += alunos[i].media;
@@ -399,16 +403,13 @@ void DadosEscola (Aluno alunos[], int totalAlunos){
         printf ("Media geral da escola: %.2f\n\n", MediaGeral);
         
         printf ("Dados do aluno destaque:\n");
-        printf ("Nome: %s\n", alunos[MaiorM].nome);
-        printf ("Media: %.2f\n\n", alunos[MaiorM].media);
+        printf ("Nome: %s\n", alunos[MaiorA].nome);
+        printf ("Media: %.2f\n\n", alunos[MaiorA].media);
 
         printf ("Dados do pior aluno:\n");
-        printf ("Nome: %s\n", alunos[MenorM].nome);
-        printf ("Media: %.2f\n", alunos[MenorM].media);
-    } else {
-        printf ("Taxa de aprovacao da escola: N/A (sem alunos)\n");
-        printf ("Media geral da escola: N/A (sem alunos)\n");
-    }
+        printf ("Nome: %s\n", alunos[MenorA].nome);
+        printf ("Media: %.2f\n", alunos[MenorA].media);
+    } 
     printf ("\n=== DADOS DA ESCOLA ===\n");
 }
 // Funções do banco de dados
