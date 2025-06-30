@@ -87,7 +87,7 @@ int Menu(){
     printf ("1 - Matricula            6 - Excluir Aluno\n");
     printf ("2 - Adicionar Notas      7 - Aprovados / Reprovados\n");
     printf ("3 - Exibir Alunos        8 - Ranking de alunos\n");
-    printf ("4 - Buscar Aluno         9 - Media da escola\n");
+    printf ("4 - Buscar Aluno         9 - Dados da escola\n");
     printf ("5 - Atualizar Aluno      0 - Sair\n");
     printf ("\n============ GERENCIAMENTO DE ALUNOS ============\n\n");
 
