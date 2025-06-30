@@ -305,6 +305,7 @@ void ExcluirAluno(Aluno alunos[], int *totalAlunos){
         strcpy (alunos[(*totalAlunos) - 1].nome, "");
         alunos[(*totalAlunos) - 1].nota1 = 0;
         alunos[(*totalAlunos) - 1].nota2 = 0;
+        alunos[(*totalAlunos) - 1].media = 0;
         (*totalAlunos)--;
         printf ("\nAluno desmatriculado com sucesso!\n");
     }
