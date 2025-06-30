@@ -107,7 +107,7 @@ int VerificaAluno(Aluno alunos[], int totalAlunos, int numero){
             return i;
         }
     }
-    printf ("\nConta nao encontrada!\n");
+    printf ("\nAluno nao encontrado!\n");
     return -2;
 }
 // Funções funcionais
